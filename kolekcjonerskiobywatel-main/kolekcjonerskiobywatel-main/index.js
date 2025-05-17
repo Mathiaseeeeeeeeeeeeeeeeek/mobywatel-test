@@ -1,21 +1,22 @@
-
-document.querySelector(".go").addEventListener('click', () => {
-    var firstname = document.querySelector(".firstname");
-    var surname = document.querySelector(".surname");
-    var image = document.querySelector(".image");
-
+document.addEventListener('DOMContentLoaded', () => {
+    const questsContainer = document.getElementById('quests');
     
-    var borndate = document.querySelector(".borndate");
-    var pesel = document.querySelector(".pesel");
-
-    var params = new URLSearchParams();
-
-    params.set("firstname", firstname.value);
-    params.set("surname", surname.value);
-    params.set("image", image.value);
-    
-    params.set("borndate", borndate.value);
-    params.set("pesel", pesel.value);
-
-    location.href = "/yObywatel/id?" + params;
+    // Tymczasowy publiczny endpoint do testów
+    fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(response => response.json())
+        .then(data => {
+            data.slice(0, 5).forEach(quest => { // Ogranicz do 5 wyników
+                const questElement = document.createElement('div');
+                questElement.className = 'quest';
+                questElement.innerHTML = `
+                    <h3>${quest.title}</h3>
+                    <p>Status: ${quest.completed ? 'Zakończone' : 'W toku'}</p>
+                `;
+                questsContainer.appendChild(questElement);
+            });
+        })
+        .catch(error => {
+            console.error('Błąd:', error);
+            questsContainer.innerHTML = '<p>Nie można załadować zgłoszeń</p>';
+        });
 });
